@@ -1,0 +1,48 @@
+name: API Test Automation
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Install Newman & Reporters
+      run: npm install -g newman newman-reporter-html newman-reporter-htmlextra
+
+    - name: Verify Collection Exists
+      run: |
+        ls -la
+        if [ ! -f "DelveStage9ApiTask.postman_collection.json" ]; then
+          echo "❌ Error: Postman Collection file not found!"
+          exit 1
+        fi
+
+    - name: Run API tests
+      run: |
+        mkdir -p test-results
+        newman run "DelveStage9ApiTask.postman_collection.json" \
+          --global-var "baseurl=https://staging.api.delve.fun" \
+          --reporters cli,html,htmlextra,json \
+          --reporter-html-export test-results/results.html \
+          --reporter-htmlextra-export test-results/results-enhanced.html \
+          --reporter-json-export test-results/results.json \
+          --iteration-count 2 \
+          --verbose
+
+    - name: Upload Test Reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: api-test-reports
+        path: |
+          test-results/results.html
+          test-results/results-enhanced.html
+          test-results/results.json
