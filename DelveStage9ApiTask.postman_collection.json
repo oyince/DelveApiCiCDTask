@@ -1,0 +1,1604 @@
+{
+	"info": {
+		"_postman_id": "48be8017-0579-43f4-82d8-b6525325ef27",
+		"name": "DelveStage9ApiTask",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42395308",
+		"_collection_link": "https://restless-shuttle-586259.postman.co/workspace/Stage_Nine~3d51fd9c-56c8-40e4-b994-e431d281ed09/collection/42395308-48be8017-0579-43f4-82d8-b6525325ef27?action=share&source=collection_link&creator=42395308"
+	},
+	"item": [
+		{
+			"name": "Positive",
+			"item": [
+				{
+					"name": "UserRegistrationUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response body indicates user registered\", function () {\r",
+									"    pm.expect(response.message).to.include(\"created\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Lists of common English first and last names\r",
+									"const firstNames = [\r",
+									"    \"James\", \"Mary\", \"John\", \"Patricia\", \"Robert\", \"Jennifer\", \r",
+									"    \"Michael\", \"Linda\", \"William\", \"Elizabeth\", \"David\", \"Susan\", \r",
+									"    \"Joseph\", \"Margaret\", \"Charles\", \"Jessica\", \"Thomas\", \"Sarah\"\r",
+									"];\r",
+									"\r",
+									"const lastNames = [\r",
+									"    \"Smith\", \"Johnson\", \"Brown\", \"Taylor\", \"Wilson\", \"Davis\", \r",
+									"    \"Clark\", \"Lewis\", \"Walker\", \"Hall\", \"Allen\", \"Young\", \r",
+									"    \"King\", \"Wright\", \"Scott\", \"Green\", \"Adams\", \"Baker\"\r",
+									"];\r",
+									"\r",
+									"const languages = [\"English\", \"Spanish\", \"French\", \"German\", \"Chinese\", \"Italian\"];\r",
+									"const proficiencyLevels = [\"Beginner\", \"Intermediate\", \"Advanced\"];\r",
+									"\r",
+									"// Character sets for password\r",
+									"const lowercase = \"abcdefghijklmnopqrstuvwxyz\";\r",
+									"const uppercase = \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\";\r",
+									"const specialChars = \"!@#$%^&*()_+-=[]{}|;:,.<>?\";\r",
+									"const numbers = \"0123456789\";\r",
+									"\r",
+									"// Function to pick a random item from an array or string\r",
+									"function getRandomItem(source) {\r",
+									"    return source[Math.floor(Math.random() * source.length)];\r",
+									"}\r",
+									"\r",
+									"// Generate random values\r",
+									"const firstName = getRandomItem(firstNames);\r",
+									"const lastName = getRandomItem(lastNames);\r",
+									"const randomNumber = Math.floor(Math.random() * 1000);\r",
+									"const randomEmail = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${randomNumber}@gmail.com`;\r",
+									"const randomName = `${firstName} ${lastName}`;\r",
+									"const primaryLanguage = getRandomItem(languages);\r",
+									"const targetLanguage = getRandomItem(languages.filter(lang => lang !== primaryLanguage));\r",
+									"const targetLanguageProficiency = getRandomItem(proficiencyLevels);\r",
+									"const accountType = \"user\";\r",
+									"\r",
+									"// Generate a random password\r",
+									"let randomPassword = [\r",
+									"    getRandomItem(lowercase),    // Ensure at least 1 lowercase\r",
+									"    getRandomItem(uppercase),    // Ensure at least 1 uppercase\r",
+									"    getRandomItem(specialChars), // Ensure at least 1 special character\r",
+									"    getRandomItem(numbers)       // Ensure at least 1 number\r",
+									"].join(\"\"); // Start with \"aB!1\"\r",
+									"\r",
+									"// Add 8 more random characters from all sets\r",
+									"const allChars = lowercase + uppercase + specialChars + numbers;\r",
+									"for (let i = 0; i < 8; i++) {\r",
+									"    randomPassword += getRandomItem(allChars);\r",
+									"}\r",
+									"\r",
+									"// Shuffle the password to randomize character positions\r",
+									"randomPassword = randomPassword.split('').sort(() => Math.random() - 0.5).join('');\r",
+									"\r",
+									"// Set environment variables\r",
+									"pm.environment.set(\"name\", randomName);\r",
+									"pm.environment.set(\"email\", randomEmail);\r",
+									"pm.environment.set(\"password\", randomPassword);\r",
+									"pm.environment.set(\"primary_language\", primaryLanguage);\r",
+									"pm.environment.set(\"target_language\", targetLanguage);\r",
+									"pm.environment.set(\"target_language_proficiency\", targetLanguageProficiency);\r",
+									"pm.environment.set(\"account_type\", accountType);\r",
+									"\r",
+									"// Log the values for debugging\r",
+									"console.log(\"Generated Name: \" + randomName);\r",
+									"console.log(\"Generated Email: \" + randomEmail);\r",
+									"console.log(\"Generated Password: \" + randomPassword);\r",
+									"console.log(\"Primary Language: \" + primaryLanguage);\r",
+									"console.log(\"Target Language: \" + targetLanguage);\r",
+									"console.log(\"Target Language Proficiency: \" + targetLanguageProficiency);\r",
+									"console.log(\"Account Type: \" + accountType);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name}}\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\",\n  \"primary_language\": \"{{primary_language}}\",\n  \"target_language\": \"{{target_language}}\",\n  \"target_language_proficiency\": \"{{target_language_proficiency}}\",\n  \"account_type\": \"{{account_type}}\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/auth/sign_up",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign_up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserRegistrationAdmin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response body indicates user registered\", function () {\r",
+									"    pm.expect(response.message).to.include(\"created\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Lists of common English first and last names\r",
+									"const firstNames = [\r",
+									"    \"James\", \"Mary\", \"John\", \"Patricia\", \"Robert\", \"Jennifer\", \r",
+									"    \"Michael\", \"Linda\", \"William\", \"Elizabeth\", \"David\", \"Susan\", \r",
+									"    \"Joseph\", \"Margaret\", \"Charles\", \"Jessica\", \"Thomas\", \"Sarah\"\r",
+									"];\r",
+									"\r",
+									"const lastNames = [\r",
+									"    \"Smith\", \"Johnson\", \"Brown\", \"Taylor\", \"Wilson\", \"Davis\", \r",
+									"    \"Clark\", \"Lewis\", \"Walker\", \"Hall\", \"Allen\", \"Young\", \r",
+									"    \"King\", \"Wright\", \"Scott\", \"Green\", \"Adams\", \"Baker\"\r",
+									"];\r",
+									"\r",
+									"const languages = [\"English\", \"Spanish\", \"French\", \"German\", \"Chinese\", \"Italian\"];\r",
+									"const proficiencyLevels = [\"Beginner\", \"Intermediate\", \"Advanced\"];\r",
+									"\r",
+									"// Character sets for password\r",
+									"const lowercase = \"abcdefghijklmnopqrstuvwxyz\";\r",
+									"const uppercase = \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\";\r",
+									"const specialChars = \"!@#$%^&*()_+-=[]{}|;:,.<>?\";\r",
+									"const numbers = \"0123456789\";\r",
+									"\r",
+									"// Function to pick a random item from an array or string\r",
+									"function getRandomItem(source) {\r",
+									"    return source[Math.floor(Math.random() * source.length)];\r",
+									"}\r",
+									"\r",
+									"// Generate random values\r",
+									"const firstName = getRandomItem(firstNames);\r",
+									"const lastName = getRandomItem(lastNames);\r",
+									"const randomNumber = Math.floor(Math.random() * 1000);\r",
+									"const randomEmail = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${randomNumber}@gmail.com`;\r",
+									"const randomName = `${firstName} ${lastName}`;\r",
+									"const primaryLanguage = getRandomItem(languages);\r",
+									"const targetLanguage = getRandomItem(languages.filter(lang => lang !== primaryLanguage));\r",
+									"const targetLanguageProficiency = getRandomItem(proficiencyLevels);\r",
+									"const accountType = \"admin\";\r",
+									"\r",
+									"// Generate a random password\r",
+									"let randomPassword = [\r",
+									"    getRandomItem(lowercase),    // Ensure at least 1 lowercase\r",
+									"    getRandomItem(uppercase),    // Ensure at least 1 uppercase\r",
+									"    getRandomItem(specialChars), // Ensure at least 1 special character\r",
+									"    getRandomItem(numbers)       // Ensure at least 1 number\r",
+									"].join(\"\"); // Start with \"aB!1\"\r",
+									"\r",
+									"// Add 8 more random characters from all sets\r",
+									"const allChars = lowercase + uppercase + specialChars + numbers;\r",
+									"for (let i = 0; i < 8; i++) {\r",
+									"    randomPassword += getRandomItem(allChars);\r",
+									"}\r",
+									"\r",
+									"// Shuffle the password to randomize character positions\r",
+									"randomPassword = randomPassword.split('').sort(() => Math.random() - 0.5).join('');\r",
+									"\r",
+									"// Set environment variables\r",
+									"pm.environment.set(\"name\", randomName);\r",
+									"pm.environment.set(\"email\", randomEmail);\r",
+									"pm.environment.set(\"password\", randomPassword);\r",
+									"pm.environment.set(\"primary_language\", primaryLanguage);\r",
+									"pm.environment.set(\"target_language\", targetLanguage);\r",
+									"pm.environment.set(\"target_language_proficiency\", targetLanguageProficiency);\r",
+									"pm.environment.set(\"account_type\", accountType);\r",
+									"\r",
+									"// Log the values for debugging\r",
+									"console.log(\"Generated Name: \" + randomName);\r",
+									"console.log(\"Generated Email: \" + randomEmail);\r",
+									"console.log(\"Generated Password: \" + randomPassword);\r",
+									"console.log(\"Primary Language: \" + primaryLanguage);\r",
+									"console.log(\"Target Language: \" + targetLanguage);\r",
+									"console.log(\"Target Language Proficiency: \" + targetLanguageProficiency);\r",
+									"console.log(\"Account Type: \" + accountType);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name}}\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\",\n  \"primary_language\": \"{{primary_language}}\",\n  \"target_language\": \"{{target_language}}\",\n  \"target_language_proficiency\": \"{{target_language_proficiency}}\",\n  \"account_type\": \"{{account_type}}\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/auth/sign_up",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign_up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserLoginWithValidCredentialsUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));\r",
+									"//pm.test(\"Response contains tokens and user data\", () => {\r",
+									"    //const json = pm.response.json();\r",
+									"    //pm.expect(json.access_token).to.be.a(\"string\");\r",
+									"    //pm.collectionVariables.set(\"validAccessToken\", json.access_token)\r",
+									"//});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const email = \"susan.hall486@gmail.com\";\r",
+									"const password = \"!{AVX9y0aiS(\";\r",
+									"\r",
+									"// Store variables for use in the request\r",
+									"pm.environment.set(\"userEmail\", email);\r",
+									"pm.environment.set(\"userPassword\", password);\r",
+									"\r",
+									"console.log(`Generated email: ${email}`);\r",
+									"console.log(`Using password: ${password}`);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{userPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/auth/sign_in",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign_in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserLoginWithValidCredentialsAdmin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));\r",
+									"//pm.test(\"Response contains tokens and user data\", () => {\r",
+									"    //const json = pm.response.json();\r",
+									"    //pm.expect(json.access_token).to.be.a(\"string\");\r",
+									"    //pm.collectionVariables.set(\"validAccessToken\", json.access_token)\r",
+									"//});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const email = \"john.king126@gmail.com\";\r",
+									"const password = \"8L+kV)?{|Jt}\";\r",
+									"\r",
+									"// Store variables for use in the request\r",
+									"pm.environment.set(\"userEmail\", email);\r",
+									"pm.environment.set(\"userPassword\", password);\r",
+									"\r",
+									"console.log(`Generated email: ${email}`);\r",
+									"console.log(`Using password: ${password}`);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{userPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/auth/sign_in",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign_in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserForgotPasswordEmail",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const email = \"charles.clark810@gmail.com\";\r",
+									"\r",
+									"pm.environment.set(\"userEmail\", email);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{userEmail}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/auth/forgot-password",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response body indicates message was sent\", function () {\r",
+									"    pm.expect(response.message).to.include(\"has been sent\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"John Doe\",\r\n  \"email\": \"johndoe@gmail.com\",\r\n  \"message\": \"In the country of the blind, the one-eyed man is the king\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/contact",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"contact"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SubcribeNewLetter",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const email = \"oyinuahsimeni@gmial.com\";\r",
+									"\r",
+									"// Store variables for use in the request\r",
+									"pm.environment.set(\"email\", email);\r",
+									"\r",
+									"console.log(`Generated email: ${email}`);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response body indicates that subscription was successful\", function () {\r",
+									"    pm.expect(response.message).to.include(\"Success\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n      \"email\": \"{{email}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/newsletter/subscribe",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"newsletter",
+								"subscribe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "unSubcribeNewLetter",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const email = \"oyinuahsimeni@gmial.com\";\r",
+									"\r",
+									"// Store variables for use in the request\r",
+									"pm.environment.set(\"email\", email);\r",
+									"\r",
+									"console.log(`Generated email: ${email}`);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response body indicates that email unsubscribed successfully\", function () {\r",
+									"    pm.expect(response.message).to.include(\"unsubscribed\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{email}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/newsletter/unsubscribe",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"newsletter",
+								"unsubscribe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Objects",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/api/v1/objects",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"objects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetQuests",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/quests",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"quests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCharacters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Created and updated timestamps are present\", function () {\r",
+									"    var character = pm.response.json().data[\"0\"];\r",
+									"    pm.expect(character.created_at).to.be.a(\"string\");\r",
+									"    pm.expect(character.updated_at).to.be.a(\"string\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/api/v1/characters",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"characters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getBackgrounds",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/api/v1/backgrounds",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"backgrounds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getBackgroundWithID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/api/v1/backgrounds/b013c45d-fcde-4561-aea5-830157ddd9a9",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"backgrounds",
+								"b013c45d-fcde-4561-aea5-830157ddd9a9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserSubscriptionPlan",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set variables for the subscription request",
+									"pm.environment.set(\"subscriptionPlan\", \"Basic Plan\"); // Example plan name",
+									"",
+									"// Log the subscription plan for debugging (optional)",
+									"console.log(\"Attempting to subscribe to plan:\", pm.environment.get(\"subscriptionPlan\"));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check if the response status is OK (200) or an error (e.g., 400)",
+									"if (pm.response.code === 200) {",
+									"    console.log(\"Subscription successful!\");",
+									"",
+									"    // Parse the response body to extract data if needed",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"subscriptionId\", jsonData.id); // Assuming the subscription ID is returned",
+									"",
+									"    console.log(\"Subscription ID:\", pm.environment.get(\"subscriptionId\"));",
+									"} else if (pm.response.code === 400) {",
+									"    var jsonData = pm.response.json();",
+									"    console.log(\"Subscription failed: \" + jsonData.message); // Log the error message",
+									"",
+									"    // Handle specific subscription errors if needed",
+									"    if (jsonData.message.includes(\"plan\")) {",
+									"        console.log(\"Error: Invalid subscription plan. Please check the plan name.\");",
+									"    }",
+									"} else {",
+									"    console.log(\"Subscription failed with status code: \" + pm.response.code);",
+									"    console.log(\"Response Body:\", pm.response.text()); // Log the full response for debugging",
+									"}",
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Content type is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Success field in the response should exist and be true\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.have.property('success', true);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the status_code field in the response\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.status_code).to.exist;",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFhYmM5ODc1LTRjYzAtNDJhOC04M2Y2LTllYjgzN2FhYjI5MiIsImVtYWlsIjoidG9taXllZUB5YWhvby5jb20iLCJpYXQiOjE3NDM3MDU1NzcsImV4cCI6MTc0NjI5NzU3N30.DXgNuJKwi8PnUFry9GYOWae95mTxk8EXJWffWpaCdMc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"plans\": [\n        \"{{subscriptionPlan}}\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/subscriptions/subscription-plans",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"subscription-plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserGetSubscriptions",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set any necessary variables for the request",
+									"pm.environment.set(\"authToken\", \"your_auth_token_here\"); // Example: User authentication token",
+									"",
+									"// Log the request details for debugging (optional)",
+									"console.log(\"Preparing to retrieve subscriptions...\");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the response body",
+									"var jsonData = pm.response.json();",
+									"",
+									"// Check if the response indicates success",
+									"if (jsonData.success && jsonData.status_code === 200) {",
+									"    console.log(\"Request successful:\", jsonData.message);",
+									"",
+									"    // Check if there are subscriptions in the response",
+									"    if (jsonData.data.subscriptions.length > 0) {",
+									"        console.log(\"Subscriptions retrieved:\", jsonData.data.subscriptions);",
+									"    } else {",
+									"        console.log(\"No subscriptions found.\");",
+									"    }",
+									"} else {",
+									"    console.log(\"Request failed with status code:\", jsonData.status_code);",
+									"    console.log(\"Error message:\", jsonData.message); // Log the error message for debugging",
+									"}",
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response Content-Type is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(450);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Data object is present in the response\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data).to.exist;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Subscriptions array should be an empty array\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.data.subscriptions).to.be.an('array').that.is.empty;",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFhYmM5ODc1LTRjYzAtNDJhOC04M2Y2LTllYjgzN2FhYjI5MiIsImVtYWlsIjoidG9taXllZUB5YWhvby5jb20iLCJpYXQiOjE3NDM3MDU1NzcsImV4cCI6MTc0NjI5NzU3N30.DXgNuJKwi8PnUFry9GYOWae95mTxk8EXJWffWpaCdMc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/api/v1/subscriptions",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Negative",
+			"item": [
+				{
+					"name": "UserRegisterWithExistingCredential",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check if the status code is 400\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response body indicates email is taken\", function () {\r",
+									"    pm.expect(response.message).to.include(\"exists\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"name\": \"Elizabeth Adams\",\n\"email\": \"elizabeth.adams589@gmail.com\",\n\"password\": \"9y6AtED&[)Y)\",\n\"primary_language\": \"Spanish\",\n\"target_language\":\"Chinese\",\n\"target_language_proficiency\": \"Advanced\",\n\"account_type\": \"user\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/auth/sign_up",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign_up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserRegisterWithoutPassword",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Lists of common English first and last names\r",
+									"const firstNames = [\r",
+									"    \"James\", \"Mary\", \"John\", \"Patricia\", \"Robert\", \"Jennifer\", \r",
+									"    \"Michael\", \"Linda\", \"William\", \"Elizabeth\", \"David\", \"Susan\", \r",
+									"    \"Joseph\", \"Margaret\", \"Charles\", \"Jessica\", \"Thomas\", \"Sarah\"\r",
+									"];\r",
+									"\r",
+									"const lastNames = [\r",
+									"    \"Smith\", \"Johnson\", \"Brown\", \"Taylor\", \"Wilson\", \"Davis\", \r",
+									"    \"Clark\", \"Lewis\", \"Walker\", \"Hall\", \"Allen\", \"Young\", \r",
+									"    \"King\", \"Wright\", \"Scott\", \"Green\", \"Adams\", \"Baker\"\r",
+									"];\r",
+									"\r",
+									"const languages = [\"English\", \"Spanish\", \"French\", \"German\", \"Chinese\", \"Italian\"];\r",
+									"const proficiencyLevels = [\"Beginner\", \"Intermediate\", \"Advanced\"];\r",
+									"\r",
+									"// Character sets for password\r",
+									"const lowercase = \"abcdefghijklmnopqrstuvwxyz\";\r",
+									"const uppercase = \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\";\r",
+									"const specialChars = \"!@#$%^&*()_+-=[]{}|;:,.<>?\";\r",
+									"const numbers = \"0123456789\";\r",
+									"\r",
+									"// Function to pick a random item from an array or string\r",
+									"function getRandomItem(source) {\r",
+									"    return source[Math.floor(Math.random() * source.length)];\r",
+									"}\r",
+									"\r",
+									"// Generate random values\r",
+									"const firstName = getRandomItem(firstNames);\r",
+									"const lastName = getRandomItem(lastNames);\r",
+									"const randomNumber = Math.floor(Math.random() * 1000);\r",
+									"const randomEmail = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${randomNumber}@gmail.com`;\r",
+									"const randomName = `${firstName} ${lastName}`;\r",
+									"const primaryLanguage = getRandomItem(languages);\r",
+									"const targetLanguage = getRandomItem(languages.filter(lang => lang !== primaryLanguage));\r",
+									"const targetLanguageProficiency = getRandomItem(proficiencyLevels);\r",
+									"const accountType = \"user\";\r",
+									"\r",
+									"// Set password as a single space\r",
+									"const emptyPassword = \" \";\r",
+									"\r",
+									"// Set environment variables\r",
+									"pm.environment.set(\"name\", randomName);\r",
+									"pm.environment.set(\"email\", randomEmail);\r",
+									"pm.environment.set(\"password\", emptyPassword);\r",
+									"pm.environment.set(\"primary_language\", primaryLanguage);\r",
+									"pm.environment.set(\"target_language\", targetLanguage);\r",
+									"pm.environment.set(\"target_language_proficiency\", targetLanguageProficiency);\r",
+									"pm.environment.set(\"account_type\", accountType);\r",
+									"\r",
+									"// Log the values for debugging\r",
+									"console.log(\"Generated Name: \" + randomName);\r",
+									"console.log(\"Generated Email: \" + randomEmail);\r",
+									"console.log(\"Password: '\" + emptyPassword + \"' (single space)\");\r",
+									"console.log(\"Primary Language: \" + primaryLanguage);\r",
+									"console.log(\"Target Language: \" + targetLanguage);\r",
+									"console.log(\"Target Language Proficiency: \" + targetLanguageProficiency);\r",
+									"console.log(\"Account Type: \" + accountType);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response body indicates that password field cannot be empty\", function () {\r",
+									"    pm.expect(response.message.join(\" \")).to.match(/not be empty/);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name}}\",\n  \"email\": \"{{email}}\",\n  //\"password\": \"{{emptyPassword}}\",\n  \"primary_language\": \"{{primary_language}}\",\n  \"target_language\": \"{{target_language}}\",\n  \"target_language_proficiency\": \"{{target_language_proficiency}}\",\n  \"account_type\": \"{{account_type}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/auth/sign_up",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign_up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserLoginWithIncorrectPassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response body indicates credential is invalid\", function () {\r",
+									"    pm.expect(response.message).to.include(\"Invalid\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const email = \"susan.hall486@gmail.com\";\r",
+									"const password = \"!{AVX9y0aiS)()\";\r",
+									"\r",
+									"// Store variables for use in the request\r",
+									"pm.environment.set(\"userEmail\", email);\r",
+									"pm.environment.set(\"userPassword\", password);\r",
+									"\r",
+									"console.log(`Generated email: ${email}`);\r",
+									"console.log(`Using password: ${password}`);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{userPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/auth/sign_in",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign_in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserLoginNonexistingCredentials",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response body indicates the credential has some issues\", function () {\r",
+									"    pm.expect(response.message).to.include(\"Invalid\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const email = \"ekeki@gmail.com\";\r",
+									"const password = \"P@ssword0\";\r",
+									"\r",
+									"// Store variables for use in the request\r",
+									"pm.environment.set(\"userEmail\", email);\r",
+									"pm.environment.set(\"userPassword\", password);\r",
+									"\r",
+									"console.log(`Generated email: ${email}`);\r",
+									"console.log(`Using password: ${password}`);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{userPassword}}\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/auth/sign_in",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign_in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserForgotPasswordWithUnregisteredEmail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response body indicates that the Email doesn't have an account\", function () {\r",
+									"    pm.expect(response.message).to.include(\"does not exist\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const email = \"ekeki@gmail.com\";\r",
+									"\r",
+									"pm.environment.set(\"userEmail\", email);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{userEmail}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/auth/forgot-password",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserShowSubscriptionWithID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 404\", function () {",
+									"  pm.expect(pm.response.code).to.equal(404);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields - status_code, status, and message\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.status_code).to.exist;",
+									"    pm.expect(responseData.status).to.exist;",
+									"    pm.expect(responseData.message).to.exist;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(770);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify that status_code is a non-negative integer\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.status_code).to.exist.and.to.be.a('number');",
+									"  pm.expect(responseData.status_code).to.be.at.least(0);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Status is a boolean value\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData.status).to.be.a('boolean');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFhYmM5ODc1LTRjYzAtNDJhOC04M2Y2LTllYjgzN2FhYjI5MiIsImVtYWlsIjoidG9taXllZUB5YWhvby5jb20iLCJpYXQiOjE3NDM3MDYzNzQsImV4cCI6MTc0NjI5ODM3NH0.ElFik___6pjfe4fCWSFCIgGO_Hmhfow8iM7VihwLw1Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"active\",\n  \"plan\": \"Duo\",\n  \"period\": \"Monthly\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/subscriptions/{aabc9875-4cc0-42a8-83f6-9eb837aab292}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"{aabc9875-4cc0-42a8-83f6-9eb837aab292}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserShowSubscriptionWithoutBearerToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 404\", function () {",
+									"    pm.expect(pm.response.code).to.equal(404);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields - status_code, status, and message\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.status_code).to.exist;",
+									"    pm.expect(responseData.status).to.exist;",
+									"    pm.expect(responseData.message).to.exist;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response content type is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set variables for the request",
+									"pm.environment.set(\"userId\", \"12345\"); // Example user ID",
+									"",
+									"// Log the request details for debugging (optional)",
+									"console.log(\"Preparing to send request to show subscription plan for user ID:\", pm.environment.get(\"userId\"));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFhYmM5ODc1LTRjYzAtNDJhOC04M2Y2LTllYjgzN2FhYjI5MiIsImVtYWlsIjoidG9taXllZUB5YWhvby5jb20iLCJpYXQiOjE3NDM3MDU1NzcsImV4cCI6MTc0NjI5NzU3N30.DXgNuJKwi8PnUFry9GYOWae95mTxk8EXJWffWpaCdMc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/api/v1/subscriptions/my-subscription",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"my-subscription"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseurl",
+			"value": "https://staging.api.delve.fun",
+			"type": "default"
+		},
+		{
+			"key": "validAccessToken",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
